@@ -1,0 +1,14 @@
+# Real time used this file.
+---
+- hosts: webservers
+  remote_user: root
+  become: yes
+  vars_files:
+  - abc.yaml
+  tasks:
+  - name: installed http server
+    yum: name={{pkg}} state=installed
+  - name: copy index.html
+    copy: src=index.html dest=/var/www/html
+  - name: start service
+    service: name={{pkg}} state=started
