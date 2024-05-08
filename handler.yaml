@@ -1,0 +1,18 @@
+---
+- hosts: webservers
+  remote_user: root
+  become: yes
+  vars_files:
+  - abc.yaml
+  tasks:
+  - name: install httpd package
+    yum: name={{pkg}} state=installed
+  - name: copy index.html file
+    copy: src=index.html dest=/var/www/html
+    ignore_errors: yes
+    notify: restart httpd service
+  - name: start httpd service
+    service: name={{pkg}} state=started
+  handlers:
+  - name: restart httpd service
+    service: name={{pkg}} state=restarted
